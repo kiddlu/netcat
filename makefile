@@ -1,21 +1,24 @@
+CC = $(CROSS_COMPILE)gcc
 
-cc=cl
-link=link
+TARGET=nc
+TARGET_EXE=$(TARGET)
 
-cflags=/nologo /ML /W3 /GX /O2 /D "NDEBUG" /D "WIN32" /D "_CONSOLE" /D "TELNET" /D "GAPING_SECURITY_HOLE" /YX /FD /c 
-lflags=kernel32.lib user32.lib wsock32.lib winmm.lib /nologo /subsystem:console /incremental:yes /machine:I386 /out:nc.exe
+SRC = getopt.c doexec.c netcat.c
+OBJ = $(SRC:.c=.o)
 
-all: nc.exe
+DEPEND_STATIC_LIB =
 
-getopt.obj: getopt.c
-    $(cc) $(cflags) getopt.c
+CFLAGS = -DTELNET 
+CFLAGS += -I./
+LDFLAGS += -lkernel32 -luser32 -lwinmm -lws2_32
 
-doexec.obj: doexec.c
-    $(cc) $(cflags) doexec.c
+$(TARGET_EXE):$(OBJ) $(DEPEND_STATIC_LIB);$(CC) -o $@ $^ $(LDFLAGS)
+$(filter %.o,$(OBJ)):%.o:%.c;$(CC) $(CFLAGS) -c -o $@ $<
 
-netcat.obj: netcat.c
-    $(cc) $(cflags) netcat.c
+.PHONY:install
+install:
+	 mv $(TARGET_EXE) ../../output/bin/
 
-
-nc.exe: getopt.obj doexec.obj netcat.obj
-    $(link) getopt.obj doexec.obj netcat.obj $(lflags)
+.PHONY:clean
+clean:
+	 rm -f $(OBJ) $(TARGET_EXE)

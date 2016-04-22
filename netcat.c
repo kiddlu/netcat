@@ -94,6 +94,8 @@
 #ifdef WIN32
 # include <time.h>
 # include <fcntl.h>
+# include <sys/types.h>
+# include <sys/stat.h>
 # include <io.h>
 # include <conio.h>
 # include "getopt.h"
