@@ -1,6 +1,6 @@
 CC = $(CROSS_COMPILE)gcc
 
-TARGET=nc
+TARGET=wnc
 TARGET_EXE=$(TARGET)
 
 SRC = getopt.c doexec.c netcat.c
@@ -8,9 +8,9 @@ OBJ = $(SRC:.c=.o)
 
 DEPEND_STATIC_LIB =
 
-CFLAGS = -DTELNET 
+CFLAGS = -DTELNET -DGAPING_SECURITY_HOLE
 CFLAGS += -I./
-LDFLAGS += -lkernel32 -luser32 -lwinmm -lws2_32
+//LDFLAGS += -lkernel32 -luser32 -lwinmm -lws2_32
 
 $(TARGET_EXE):$(OBJ) $(DEPEND_STATIC_LIB);$(CC) -o $@ $^ $(LDFLAGS)
 $(filter %.o,$(OBJ)):%.o:%.c;$(CC) $(CFLAGS) -c -o $@ $<
